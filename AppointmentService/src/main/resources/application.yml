@@ -3,7 +3,7 @@ server:
   
 spring:
   datasource:
-    url: jdbc:h2:file:./data/appointmentDB
+    url: jdbc:h2:file:./data/appointmentDataBase
     username: root
     password: root
     driverClassName: org.h2.Driver

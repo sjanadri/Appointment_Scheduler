@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.ssj.SchedulerApp.AppointmentService.model.Appointment;
-import com.ssj.SchedulerApp.AppointmentService.model.TrainerSlots;
+import com.ssj.SchedulerApp.AppointmentService.model.AvailableSlots;
 import com.ssj.SchedulerApp.AppointmentService.repositories.AppointmentRepo;
 
 @RestController
@@ -64,6 +64,7 @@ public class AppointmentController {
 	@DeleteMapping(path = "/cancelAppointment/{appointmentId}")
 	public ResponseEntity<Integer> deleteAppointment(@PathVariable Integer appointmentId) {
 	    repo.deleteById(appointmentId);
+	    //write logic to free the slot
 	    return ResponseEntity.ok(appointmentId);
 	}
 		
@@ -84,13 +85,16 @@ public class AppointmentController {
 	}
 	
 	//view trainer availability
-		@RequestMapping(path ="/trainername/all")
-		public ResponseEntity<List<TrainerSlots>> getAllTrainer() {
-			//trainerSlots = restTemplate.
+		@RequestMapping(path ="/trainerSlots/{name}")
+		public ResponseEntity<AvailableSlots> getAvailableSlots(@PathVariable String name) {
+			AvailableSlots trainerSlots = new AvailableSlots();
 			
-			return new ResponseEntity<>(null, HttpStatus.OK);
+			@SuppressWarnings("unchecked")
+			List<Appointment> availableAppointments = restTemplate.getForObject("http://localhost:8081/trainer/name/"+name, List.class);
+			
+			trainerSlots.setTrainerName(name);
+			trainerSlots.setAvailableSlots(availableAppointments);
+			return new ResponseEntity<>(trainerSlots, HttpStatus.OK);
 		}	
 	
-	
-
 }

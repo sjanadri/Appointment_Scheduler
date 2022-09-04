@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssj.SchedulerApp.TrainerService.Model.Trainer;
+import com.ssj.SchedulerApp.TrainerService.Model.TrainerSlot;
 import com.ssj.SchedulerApp.TrainerService.repositories.TrainerRepo;
 
 @RestController
@@ -21,6 +23,14 @@ public class TrainerController {
 	
 	@Autowired
 	private TrainerRepo repo;
+	
+	@Autowired
+	private SlotsService service;
+	
+	@GetMapping("/get-info")
+    public String getStringMessage() {
+        return "Hi ! You will be able to monitor health of the application !!" ;
+    }
 	
 	//to test service reachable
 	@RequestMapping(path ="/hello")
@@ -52,6 +62,10 @@ public class TrainerController {
 	@PostMapping(value ="/add")
 	public ResponseEntity<Trainer> addTrainer(@RequestBody Trainer newTrainer) {
 		System.out.println(newTrainer);
+		
+		//generate Slots for trainer Added
+		List<TrainerSlot> trainerSlots = service.createSlotsforTrainer(newTrainer);
+		newTrainer.setTrainerSlots(trainerSlots);
 		Trainer trainer = repo.save(newTrainer);
 		return new ResponseEntity<>(trainer, HttpStatus.OK);
 	}
