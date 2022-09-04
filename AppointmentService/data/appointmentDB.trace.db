@@ -1,0 +1,6 @@
+2022-09-04 06:36:40 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DESC[*] APPOINTMENT"; expected "DELETE, DROP, DECLARE, DEALLOCATE"; SQL statement:
+desc appointment [42001-200]
+2022-09-04 06:36:46 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DESC[*] TABLE APPOINTMENT"; expected "DELETE, DROP, DECLARE, DEALLOCATE"; SQL statement:
+desc table appointment [42001-200]
