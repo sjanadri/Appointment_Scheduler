@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -23,17 +24,26 @@ import lombok.NoArgsConstructor;
 public class Trainer {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int id;
 
-	@Column(nullable = false)
+	@Column(unique = true)
 	String trainerName;
 	String dayOfWeek;
 	String availableFrom;
 	String availableTo;
 
-	@OneToMany(mappedBy = "Trainer",cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "trainer_pid", referencedColumnName = "id")
 	public List<TrainerSlot> trainerSlots;
+
+	public Trainer(String trainerName, String dayOfWeek, String availableFrom, String availableTo) {
+		super();
+		this.trainerName = trainerName;
+		this.dayOfWeek = dayOfWeek;
+		this.availableFrom = availableFrom;
+		this.availableTo = availableTo;
+	}
 
 	public int getId() {
 		return id;

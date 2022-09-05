@@ -290,3 +290,6 @@ Caused by: java.lang.IllegalStateException: The file is locked: nio:/Users/shrav
 2022-09-04 23:11:41 jdbc[13]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM TRAINER_TRAINER_SLOTS TRAINER_SLOT TRAINER[*]"; SQL statement:
 SELECT * FROM TRAINER_TRAINER_SLOTS TRAINER_SLOT TRAINER [42000-200]
+2022-09-05 00:07:03 jdbc[79]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DROP TRAINER_TRAINER_SLOTS[*]"; expected "TABLE, INDEX, USER, SEQUENCE, CONSTANT, TRIGGER, VIEW, ROLE, ALIAS, SCHEMA, ALL, DOMAIN, TYPE, DATATYPE, AGGREGATE, SYNONYM"; SQL statement:
+drop TRAINER_TRAINER_SLOTS [42001-200]

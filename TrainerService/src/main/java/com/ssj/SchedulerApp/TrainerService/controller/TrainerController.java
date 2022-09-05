@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssj.SchedulerApp.TrainerService.Model.Trainer;
 import com.ssj.SchedulerApp.TrainerService.Model.TrainerSlot;
+import com.ssj.SchedulerApp.TrainerService.repositories.SlotsRepository;
 import com.ssj.SchedulerApp.TrainerService.repositories.TrainerRepo;
 
 @RestController
@@ -23,6 +24,9 @@ public class TrainerController {
 	
 	@Autowired
 	private TrainerRepo repo;
+	
+	@Autowired
+	private SlotsRepository slotsRepo;
 	
 	@Autowired
 	private SlotsService service;
