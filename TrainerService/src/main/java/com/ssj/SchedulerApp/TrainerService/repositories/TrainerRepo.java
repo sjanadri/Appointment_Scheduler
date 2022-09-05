@@ -13,5 +13,5 @@ public interface TrainerRepo extends JpaRepository<Trainer, Integer> {
 
 	//findByname(all available Days and  slots)
 	Trainer findTrainerByTrainerName(String name);
-
+	
 }

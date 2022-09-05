@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,9 +34,12 @@ public class Trainer {
 	String availableFrom;
 	String availableTo;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "trainer_pid", referencedColumnName = "id")
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	public List<TrainerSlot> trainerSlots;
+
+	public Trainer() {
+		super();
+	}
 
 	public Trainer(String trainerName, String dayOfWeek, String availableFrom, String availableTo) {
 		super();
