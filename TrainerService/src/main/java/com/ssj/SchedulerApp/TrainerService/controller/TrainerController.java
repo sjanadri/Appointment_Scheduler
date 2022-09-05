@@ -1,10 +1,9 @@
 package com.ssj.SchedulerApp.TrainerService.controller;
 
-import org.springframework.http.HttpStatus;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssj.SchedulerApp.TrainerService.Model.Trainer;
 import com.ssj.SchedulerApp.TrainerService.Model.TrainerSlot;
-import com.ssj.SchedulerApp.TrainerService.repositories.SlotsRepository;
 import com.ssj.SchedulerApp.TrainerService.repositories.TrainerRepo;
 
 @RestController
@@ -24,9 +22,6 @@ public class TrainerController {
 	
 	@Autowired
 	private TrainerRepo repo;
-	
-	@Autowired
-	private SlotsRepository slotsRepo;
 	
 	@Autowired
 	private SlotsService service;
@@ -49,7 +44,7 @@ public class TrainerController {
 		return new ResponseEntity<>(trainer, HttpStatus.OK);
 	}
 	
-	@RequestMapping(path ="/all")
+	@GetMapping(path ="/all")
 	public ResponseEntity<java.util.List<Trainer>> getAllTrainers() {
 		
 		List<Trainer> allTrainers = repo.findAll();
