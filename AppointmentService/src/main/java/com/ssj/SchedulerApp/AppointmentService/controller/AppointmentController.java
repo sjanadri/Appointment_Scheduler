@@ -63,17 +63,14 @@ public class AppointmentController {
 	}
 
 	// view trainer availability
+	@SuppressWarnings("unchecked")
 	@RequestMapping(path = "/trainerSlots/{name}")
 	public ResponseEntity<List<AvailableSlots>> getAvailableSlots(@PathVariable String name) {
-		
-		System.out.println("************im here **** getAvailableSlots***");
 
-		TrainerResponse trainer = restTemplate.getForObject("http://localhost:8081/trainer/name/" + name, TrainerResponse.class);
-		
 		List<AvailableSlots> trainerSlots = new ArrayList<>();
-		trainerSlots = trainer.getTrainerSlots();
+		trainerSlots = restTemplate.getForObject("http://localhost:8081/trainer/slots/" + name, List.class);
 		
-		return new ResponseEntity<>(trainerSlots, HttpStatus.OK);
+		return new ResponseEntity<List<AvailableSlots>>(trainerSlots, HttpStatus.OK);
 	}
 
 	// cancel appointment
