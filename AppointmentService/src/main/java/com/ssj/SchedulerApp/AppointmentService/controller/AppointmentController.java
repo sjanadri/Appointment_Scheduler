@@ -3,6 +3,7 @@ package com.ssj.SchedulerApp.AppointmentService.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -69,20 +70,30 @@ public class AppointmentController {
 		System.out.println(bookAppointment);
 		Appointment appointment = repo.save(bookAppointment);
 		
-		// update trainer Availability in Slot table
-		
 		return new ResponseEntity<>(appointment, HttpStatus.OK);
 	}
 
-	// view trainer availability
+	// view trainer available slots 
 	@SuppressWarnings("unchecked")
 	@RequestMapping(path = "/trainerSlots/{name}")
 	public ResponseEntity<List<AvailableSlots>> getAvailableSlots(@PathVariable String name) {
-
+		
 		List<AvailableSlots> trainerSlots = new ArrayList<>();
 		trainerSlots = restTemplate.getForObject("http://localhost:8081/trainer/slots/" + name, List.class);
 		
-		return new ResponseEntity<List<AvailableSlots>>(trainerSlots, HttpStatus.OK);
+		Set<Integer> bookedSlots = repo.findSlotIDbyTrainer(name);
+		for (Integer integer : bookedSlots) {
+			System.out.println("********Im booked slot " + integer);
+		}
+		
+		 List<AvailableSlots> trainerSlotsAvailable = new ArrayList<>();
+		 for (AvailableSlots a : trainerSlots) {
+				System.out.println("*****SLOT ID*** " + a.getSlotId());
+			 if (bookedSlots.contains(a.getSlotId())) { System.out.println("*****SLOT ID Skipped *** " + a.getSlotId()); continue; }
+			 trainerSlotsAvailable.add(a);
+			}
+		
+		return new ResponseEntity<List<AvailableSlots>>(trainerSlotsAvailable, HttpStatus.OK);
 	}
 
 	// cancel appointment
