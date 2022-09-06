@@ -1,28 +1,38 @@
 package com.ssj.SchedulerApp.AppointmentService.model;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
+@Data
+//@AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(value= {"handler","FieldHandler"})
 public class AvailableSlots {
-	
+
+	// @JsonProperty("slotId")
+	int slotId;
+
+	String slotBegin;
+
+	String slotEnd;
+
 	String trainerName;
-	List<Appointment> availableSlots;
-	
-	public String getTrainerName() {
-		return trainerName;
-	}
-	public void setTrainerName(String trainerName) {
+
+	SlotStatus status;
+
+	String day;
+
+	public AvailableSlots(int slotId, String slotBegin, String slotEnd, String trainerName, SlotStatus status,
+			String day) {
+		super();
+		this.slotId = slotId;
+		this.slotBegin = slotBegin;
+		this.slotEnd = slotEnd;
 		this.trainerName = trainerName;
-	}
-	public List<Appointment> getAvailableSlots() {
-		return availableSlots;
-	}
-	public void setAvailableSlots(List<Appointment> availableSlots) {
-		this.availableSlots = availableSlots;
+		this.status = status;
+		this.day = day;
 	}
 
 }

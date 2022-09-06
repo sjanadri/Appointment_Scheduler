@@ -18,18 +18,13 @@ import lombok.NoArgsConstructor;
 public class Appointment {
 	
 		@Id 
-		@GeneratedValue(strategy = GenerationType.AUTO)
+		@GeneratedValue(strategy = GenerationType.IDENTITY)
 	 	public  int id;
-	   // public LocalDate appointmentDate;
 	    public Time appointmentStartTime;
 	    public Time appointmentEndTime;
 	    public String nameOfTrainer;
 	    public String nameOfCustomer;
-	    public String status;
-	    
-	    // private Timestamp createdAt = new Timestamp(System.currentTimeMillis());
-	    //private AppointmentStatus status = AppointmentStatus.Booked;
-	    //private BigDecimal price;
+	    public SlotStatus status;
 	    
 }
 	

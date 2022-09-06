@@ -1,5 +1,6 @@
 package com.ssj.SchedulerApp.AppointmentService.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,85 +17,90 @@ import org.springframework.web.client.RestTemplate;
 
 import com.ssj.SchedulerApp.AppointmentService.model.Appointment;
 import com.ssj.SchedulerApp.AppointmentService.model.AvailableSlots;
+import com.ssj.SchedulerApp.AppointmentService.model.TrainerResponse;
 import com.ssj.SchedulerApp.AppointmentService.repositories.AppointmentRepo;
 
 @RestController
 @RequestMapping("/appointment")
 public class AppointmentController {
-	
+
 	@Autowired
 	private AppointmentRepo repo;
-	
+
 	@Autowired
 	private RestTemplate restTemplate;
-	
-	//to test service reachable
-	@RequestMapping(path ="/hello")
+
+	// to test service reachable
+	@RequestMapping(path = "/hello")
 	public ResponseEntity<String> test() {
 		return new ResponseEntity<>("hello", HttpStatus.OK);
 	}
-	
-	//view all Appointment 
-	@RequestMapping(path ="/all")
+
+	// view all Appointment
+	@RequestMapping(path = "/all")
 	public ResponseEntity<java.util.List<Appointment>> getAllAppointments() {
-		
+
 		List<Appointment> allAppointments = repo.findAll();
 		return new ResponseEntity<>(allAppointments, HttpStatus.OK);
 	}
-	
-	//view appointment by  ID
-	@RequestMapping(path ="/id/{id}")
+
+	// view appointment by ID
+	@RequestMapping(path = "/id/{id}")
 	public ResponseEntity<Appointment> getById(@PathVariable Integer id) {
-		
-		Optional<Appointment> optionalAppointment  = repo.findById(id);
+
+		Optional<Appointment> optionalAppointment = repo.findById(id);
 		Appointment appointment = optionalAppointment.get();
 		return new ResponseEntity<>(appointment, HttpStatus.OK);
 	}
-	
-	//add schedule appointment 
-				//update trainer Availability(same service or trainer service)
-	@PostMapping(path ="/add")
+
+	// add schedule appointment
+	// update trainer Availability(same service or trainer service)
+	@PostMapping(path = "/add")
 	public ResponseEntity<Appointment> addAppointment(@RequestBody Appointment newAppointment) {
 		System.out.println(newAppointment);
 		Appointment appointment = repo.save(newAppointment);
 		return new ResponseEntity<>(appointment, HttpStatus.OK);
 	}
-	
-	//cancel appointment
+
+	// view trainer availability
+	@RequestMapping(path = "/trainerSlots/{name}")
+	public ResponseEntity<List<AvailableSlots>> getAvailableSlots(@PathVariable String name) {
+		
+		System.out.println("************im here **** getAvailableSlots***");
+
+		TrainerResponse trainer = restTemplate.getForObject("http://localhost:8081/trainer/name/" + name, TrainerResponse.class);
+		
+		List<AvailableSlots> trainerSlots = new ArrayList<>();
+		trainerSlots = trainer.getTrainerSlots();
+		
+		return new ResponseEntity<>(trainerSlots, HttpStatus.OK);
+	}
+
+	// cancel appointment
 	@DeleteMapping(path = "/cancelAppointment/{appointmentId}")
 	public ResponseEntity<Integer> deleteAppointment(@PathVariable Integer appointmentId) {
-	    repo.deleteById(appointmentId);
-	    //write logic to free the slot
-	    return ResponseEntity.ok(appointmentId);
+		repo.deleteById(appointmentId);
+		// write logic to free the slot
+		return ResponseEntity.ok(appointmentId);
 	}
-		
-	//view appointment by trainer Name
-	@RequestMapping(path ="/trainername/{name}")
-	public ResponseEntity<List<Appointment>> getByTrainerName(@PathVariable String name) {
-		
-		List<Appointment>  trainerAppointments = repo.findAppointMentBynameOfTrainer(name);
-		return new ResponseEntity<>(trainerAppointments, HttpStatus.OK);
-	}
-	
-	//view appointment by customer Name
-	@RequestMapping(path ="/customername/{name}")
-	public ResponseEntity<List<Appointment>> getByCustName(@PathVariable String name) {
-		
-		List<Appointment>  customerAppointments = repo.findAppointMentBynameOfCustomer(name);
-		return new ResponseEntity<>(customerAppointments, HttpStatus.OK);
-	}
-	
-	//view trainer availability
-		@RequestMapping(path ="/trainerSlots/{name}")
-		public ResponseEntity<AvailableSlots> getAvailableSlots(@PathVariable String name) {
-			AvailableSlots trainerSlots = new AvailableSlots();
-			
-			@SuppressWarnings("unchecked")
-			List<Appointment> availableAppointments = restTemplate.getForObject("http://localhost:8081/trainer/name/"+name, List.class);
-			
-			trainerSlots.setTrainerName(name);
-			trainerSlots.setAvailableSlots(availableAppointments);
-			return new ResponseEntity<>(trainerSlots, HttpStatus.OK);
-		}	
-	
+
+	/*
+	 * //view appointment by trainer Name
+	 * 
+	 * @RequestMapping(path ="/trainername/{name}") public
+	 * ResponseEntity<List<Appointment>> getByTrainerName(@PathVariable String name)
+	 * { List<Appointment> trainerAppointments =
+	 * repo.findAppointMentBynameOfTrainer(name); return new
+	 * ResponseEntity<>(trainerAppointments, HttpStatus.OK); }
+	 */
+	/*
+	 * //view appointment by customer Name
+	 * 
+	 * @RequestMapping(path ="/customername/{name}") public
+	 * ResponseEntity<List<Appointment>> getByCustName(@PathVariable String name) {
+	 * List<Appointment> customerAppointments =
+	 * repo.findAppointMentBynameOfCustomer(name); return new
+	 * ResponseEntity<>(customerAppointments, HttpStatus.OK); }
+	 */
+
 }
