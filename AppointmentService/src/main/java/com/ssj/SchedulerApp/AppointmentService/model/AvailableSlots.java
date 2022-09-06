@@ -35,4 +35,52 @@ public class AvailableSlots {
 		this.day = day;
 	}
 
+	public int getSlotId() {
+		return slotId;
+	}
+
+	public void setSlotId(int slotId) {
+		this.slotId = slotId;
+	}
+
+	public String getSlotBegin() {
+		return slotBegin;
+	}
+
+	public void setSlotBegin(String slotBegin) {
+		this.slotBegin = slotBegin;
+	}
+
+	public String getSlotEnd() {
+		return slotEnd;
+	}
+
+	public void setSlotEnd(String slotEnd) {
+		this.slotEnd = slotEnd;
+	}
+
+	public String getTrainerName() {
+		return trainerName;
+	}
+
+	public void setTrainerName(String trainerName) {
+		this.trainerName = trainerName;
+	}
+
+	public SlotStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(SlotStatus status) {
+		this.status = status;
+	}
+
+	public String getDay() {
+		return day;
+	}
+
+	public void setDay(String day) {
+		this.day = day;
+	}
+	
 }

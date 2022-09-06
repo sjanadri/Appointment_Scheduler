@@ -1,31 +1,27 @@
 package com.ssj.SchedulerApp.AppointmentService.model;
 
-import java.sql.Time;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@NoArgsConstructor
 public class Appointment {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int id;
 	int slotId;
-	Time appointmentStartTime;
-	Time appointmentEndTime;
+	String appointmentStartTime;
+	String appointmentEndTime;
 	String nameOfTrainer;
 	String nameOfCustomer;
 	String status;
 	
-	public Appointment(int id, int slotId, Time appointmentStartTime, Time appointmentEndTime, String nameOfTrainer,
+	public Appointment(int id, int slotId, String appointmentStartTime, String appointmentEndTime, String nameOfTrainer,
 			String nameOfCustomer, String status) {
 		super();
 		this.id = id;
@@ -35,6 +31,9 @@ public class Appointment {
 		this.nameOfTrainer = nameOfTrainer;
 		this.nameOfCustomer = nameOfCustomer;
 		this.status = status;
+	}
+	public Appointment() {
+		
 	}
 	public int getId() {
 		return id;
@@ -48,16 +47,16 @@ public class Appointment {
 	public void setSlotId(int slotId) {
 		this.slotId = slotId;
 	}
-	public Time getAppointmentStartTime() {
+	public String getAppointmentStartTime() {
 		return appointmentStartTime;
 	}
-	public void setAppointmentStartTime(Time appointmentStartTime) {
+	public void setAppointmentStartTime(String appointmentStartTime) {
 		this.appointmentStartTime = appointmentStartTime;
 	}
-	public Time getAppointmentEndTime() {
+	public String getAppointmentEndTime() {
 		return appointmentEndTime;
 	}
-	public void setAppointmentEndTime(Time appointmentEndTime) {
+	public void setAppointmentEndTime(String appointmentEndTime) {
 		this.appointmentEndTime = appointmentEndTime;
 	}
 	public String getNameOfTrainer() {

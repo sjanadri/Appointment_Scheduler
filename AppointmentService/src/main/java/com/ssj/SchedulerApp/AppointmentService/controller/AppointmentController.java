@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.ssj.SchedulerApp.AppointmentService.model.Appointment;
 import com.ssj.SchedulerApp.AppointmentService.model.AvailableSlots;
-import com.ssj.SchedulerApp.AppointmentService.model.TrainerResponse;
+import com.ssj.SchedulerApp.AppointmentService.model.SlotStatus;
 import com.ssj.SchedulerApp.AppointmentService.repositories.AppointmentRepo;
 
 @RestController
@@ -54,11 +54,23 @@ public class AppointmentController {
 	}
 
 	// add schedule appointment
-	// update trainer Availability(same service or trainer service)
-	@PostMapping(path = "/add")
-	public ResponseEntity<Appointment> addAppointment(@RequestBody Appointment newAppointment) {
-		System.out.println(newAppointment);
-		Appointment appointment = repo.save(newAppointment);
+	@PostMapping(path = "/{myName}/add")
+	public ResponseEntity<Appointment> addAppointment(@RequestBody AvailableSlots bookSlot , @PathVariable("myName") String myName) {
+		
+		Appointment bookAppointment = new Appointment();
+		
+		bookAppointment.setSlotId(bookSlot.getSlotId());
+		bookAppointment.setNameOfTrainer(bookSlot.getTrainerName());
+		bookAppointment.setNameOfCustomer(myName);
+		bookAppointment.setAppointmentStartTime(bookSlot.getSlotBegin());
+		bookAppointment.setAppointmentEndTime(bookSlot.getSlotEnd());
+		bookAppointment.setStatus(SlotStatus.Booked.toString());
+		
+		System.out.println(bookAppointment);
+		Appointment appointment = repo.save(bookAppointment);
+		
+		// update trainer Availability in Slot table
+		
 		return new ResponseEntity<>(appointment, HttpStatus.OK);
 	}
 
@@ -80,24 +92,5 @@ public class AppointmentController {
 		// write logic to free the slot
 		return ResponseEntity.ok(appointmentId);
 	}
-
-	/*
-	 * //view appointment by trainer Name
-	 * 
-	 * @RequestMapping(path ="/trainername/{name}") public
-	 * ResponseEntity<List<Appointment>> getByTrainerName(@PathVariable String name)
-	 * { List<Appointment> trainerAppointments =
-	 * repo.findAppointMentBynameOfTrainer(name); return new
-	 * ResponseEntity<>(trainerAppointments, HttpStatus.OK); }
-	 */
-	/*
-	 * //view appointment by customer Name
-	 * 
-	 * @RequestMapping(path ="/customername/{name}") public
-	 * ResponseEntity<List<Appointment>> getByCustName(@PathVariable String name) {
-	 * List<Appointment> customerAppointments =
-	 * repo.findAppointMentBynameOfCustomer(name); return new
-	 * ResponseEntity<>(customerAppointments, HttpStatus.OK); }
-	 */
 
 }
