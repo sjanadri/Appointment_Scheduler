@@ -100,7 +100,6 @@ public class AppointmentController {
 	@DeleteMapping(path = "/cancelAppointment/{appointmentId}")
 	public ResponseEntity<Integer> deleteAppointment(@PathVariable Integer appointmentId) {
 		repo.deleteById(appointmentId);
-		// write logic to free the slot
 		return ResponseEntity.ok(appointmentId);
 	}
 
