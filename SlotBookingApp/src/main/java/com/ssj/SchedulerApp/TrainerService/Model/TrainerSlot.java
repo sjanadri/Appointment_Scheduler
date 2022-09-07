@@ -25,6 +25,10 @@ public class TrainerSlot {
 	SlotStatus status;
 	String day;
 
+	public TrainerSlot() {
+		super();
+	}
+
 	public String getTrainerName() {
 		return trainerName;
 	}

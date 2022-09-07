@@ -36,6 +36,10 @@ public class Trainer {
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	public List<TrainerSlot> trainerSlots;
 
+	public Trainer() {
+		super();
+	}
+
 	public Trainer(String trainerName, String dayOfWeek, String availableFrom, String availableTo) {
 		super();
 		this.trainerName = trainerName;
