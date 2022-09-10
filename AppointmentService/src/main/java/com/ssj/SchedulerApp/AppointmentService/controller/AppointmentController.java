@@ -20,7 +20,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.ssj.SchedulerApp.AppointmentService.model.Appointment;
 import com.ssj.SchedulerApp.AppointmentService.model.AvailableSlots;
-import com.ssj.SchedulerApp.AppointmentService.model.AvailableSlotsList;
 import com.ssj.SchedulerApp.AppointmentService.model.SlotStatus;
 import com.ssj.SchedulerApp.AppointmentService.repositories.AppointmentRepo;
 
