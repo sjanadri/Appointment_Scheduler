@@ -22,6 +22,14 @@ spring:
     console.settings.trace: false 
     console.settings.web-allow-others: false
     
+  servlet:
+    multipart:
+      max-file-size:
+        2MB
+        
+      max-request-size:
+        2MB
+    
   application:
     name: TRAINER-SERVICE
 

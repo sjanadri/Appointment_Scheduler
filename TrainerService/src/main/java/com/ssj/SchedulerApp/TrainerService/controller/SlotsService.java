@@ -1,42 +1,28 @@
 package com.ssj.SchedulerApp.TrainerService.controller;
 
-import java.text.ParseException;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.ssj.SchedulerApp.TrainerService.Model.SlotStatus;
 import com.ssj.SchedulerApp.TrainerService.Model.Trainer;
-import com.ssj.SchedulerApp.TrainerService.Model.TrainerSlot;
-import com.ssj.SchedulerApp.TrainerService.util.GenerateSlots;
+import com.ssj.SchedulerApp.TrainerService.repositories.TrainerRepo;
+import com.ssj.SchedulerApp.TrainerService.util.CSVUtil;
 
 @Service
 public class SlotsService {
-	public List<TrainerSlot> createSlotsforTrainer(Trainer trainer){
-		List<TrainerSlot> trainerSlots = new ArrayList<TrainerSlot>();
-		
-		GenerateSlots generateSlots = new GenerateSlots();
-		try {
-			List<String> slotStamps = generateSlots.getSlots(trainer.getAvailableFrom(), trainer.getAvailableTo());
-			
-			for (int i = 0; i < slotStamps.size() - 1 ; i++) {
-					TrainerSlot slot = new TrainerSlot();
-				
-					slot.setTrainerName(trainer.getTrainerName());
-					slot.setDay(trainer.getDayOfWeek());
-					slot.setStatus(SlotStatus.Available);
-					slot.setSlotBegin(slotStamps.get(i));
-					slot.setSlotEnd(slotStamps.get(i+1));
-				  
-				  trainerSlots.add(slot);
-			  }
-			
-		} catch (ParseException e) {
-			generateSlots = null;
-			//e.getMessage();
-		}
-		
-		return trainerSlots;
-	}
+	
+	@Autowired
+	private TrainerRepo repo;
+	
+	 public void save(MultipartFile file) {
+		    try {
+		      List<Trainer> trainers = CSVUtil.csvToTrainers(file.getInputStream());
+		      repo.saveAll(trainers);
+		    } catch (IOException e) {
+		      throw new RuntimeException("fail to store csv data: " + e.getMessage());
+		    }
+		  }
 }
