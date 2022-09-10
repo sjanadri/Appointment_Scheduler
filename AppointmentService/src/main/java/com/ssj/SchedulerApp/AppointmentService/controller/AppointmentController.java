@@ -33,7 +33,6 @@ public class AppointmentController {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	// to test service reachable
 	@RequestMapping(path = "/hello")
 	public ResponseEntity<String> test() {
 		return new ResponseEntity<>("hello", HttpStatus.OK);
@@ -62,7 +61,6 @@ public class AppointmentController {
 			@PathVariable("myName") String myName) {
 
 		Appointment bookAppointment = new Appointment();
-
 		bookAppointment.setSlotId(bookSlot.getSlotId());
 		bookAppointment.setNameOfTrainer(bookSlot.getTrainerName());
 		bookAppointment.setNameOfCustomer(myName);
@@ -70,9 +68,7 @@ public class AppointmentController {
 		bookAppointment.setAppointmentEndTime(bookSlot.getSlotEnd());
 		bookAppointment.setStatus(SlotStatus.Booked.toString());
 
-		System.out.println(bookAppointment);
 		Appointment appointment = repo.save(bookAppointment);
-
 		return new ResponseEntity<>(appointment, HttpStatus.OK);
 	}
 
@@ -80,21 +76,16 @@ public class AppointmentController {
 	@RequestMapping(path = "/trainerSlots/{name}")
 	public ResponseEntity<List<AvailableSlots>> getAvailableSlots(@PathVariable String name) {
 
-		ResponseEntity<List<AvailableSlots>> trainerSlotsResponse = restTemplate
-					.exchange("http://localhost:8081/trainer/slots/" + name,  HttpMethod.GET, null,new  ParameterizedTypeReference<List<AvailableSlots>>(){
-		            });
-		 
+		ResponseEntity<List<AvailableSlots>> trainerSlotsResponse = restTemplate.exchange(
+				"http://localhost:8081/trainer/slots/" + name, HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<AvailableSlots>>() {
+				});
 		List<AvailableSlots> trainerSlots = trainerSlotsResponse.getBody();
-
 		Set<Integer> bookedSlots = repo.findSlotIDbyTrainer(name);
-		for (Integer integer : bookedSlots) {
-			System.out.println("********Im booked slot " + integer);
-		}
 
 		List<AvailableSlots> trainerSlotsAvailable = new ArrayList<>();
-
 		for (AvailableSlots a : trainerSlots) {
-			System.out.println("*****SLOT ID****** " + a.getSlotId());
+			System.out.println("*****All SLOT ID****** " + a.getSlotId());
 			if (bookedSlots.contains(a.getSlotId())) {
 				System.out.println("*****SLOT ID Skipped *** " + a.getSlotId());
 				continue;
