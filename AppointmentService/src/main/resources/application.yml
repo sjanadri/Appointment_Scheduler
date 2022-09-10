@@ -24,3 +24,7 @@ spring:
   application:
     name: APPOINTMENT-SERVICE
 
+
+logging:
+  level:
+    '[org.hibernate]': DEBUG

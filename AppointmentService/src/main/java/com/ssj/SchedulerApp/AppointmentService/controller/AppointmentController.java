@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -56,43 +58,50 @@ public class AppointmentController {
 
 	// add schedule appointment
 	@PostMapping(path = "/{myName}/add")
-	public ResponseEntity<Appointment> addAppointment(@RequestBody AvailableSlots bookSlot , @PathVariable("myName") String myName) {
-		
+	public ResponseEntity<Appointment> addAppointment(@RequestBody AvailableSlots bookSlot,
+			@PathVariable("myName") String myName) {
+
 		Appointment bookAppointment = new Appointment();
-		
+
 		bookAppointment.setSlotId(bookSlot.getSlotId());
 		bookAppointment.setNameOfTrainer(bookSlot.getTrainerName());
 		bookAppointment.setNameOfCustomer(myName);
 		bookAppointment.setAppointmentStartTime(bookSlot.getSlotBegin());
 		bookAppointment.setAppointmentEndTime(bookSlot.getSlotEnd());
 		bookAppointment.setStatus(SlotStatus.Booked.toString());
-		
+
 		System.out.println(bookAppointment);
 		Appointment appointment = repo.save(bookAppointment);
-		
+
 		return new ResponseEntity<>(appointment, HttpStatus.OK);
 	}
 
-	// view trainer available slots 
-	@SuppressWarnings("unchecked")
+	// view trainer available slots
 	@RequestMapping(path = "/trainerSlots/{name}")
 	public ResponseEntity<List<AvailableSlots>> getAvailableSlots(@PathVariable String name) {
-		
-		List<AvailableSlots> trainerSlots = new ArrayList<>();
-		trainerSlots = restTemplate.getForObject("http://localhost:8081/trainer/slots/" + name, List.class);
-		
+
+		ResponseEntity<List<AvailableSlots>> trainerSlotsResponse = restTemplate
+					.exchange("http://localhost:8081/trainer/slots/" + name,  HttpMethod.GET, null,new  ParameterizedTypeReference<List<AvailableSlots>>(){
+		            });
+		 
+		List<AvailableSlots> trainerSlots = trainerSlotsResponse.getBody();
+
 		Set<Integer> bookedSlots = repo.findSlotIDbyTrainer(name);
 		for (Integer integer : bookedSlots) {
 			System.out.println("********Im booked slot " + integer);
 		}
-		
-		 List<AvailableSlots> trainerSlotsAvailable = new ArrayList<>();
-		 for (AvailableSlots a : trainerSlots) {
-				System.out.println("*****SLOT ID*** " + a.getSlotId());
-			 if (bookedSlots.contains(a.getSlotId())) { System.out.println("*****SLOT ID Skipped *** " + a.getSlotId()); continue; }
-			 trainerSlotsAvailable.add(a);
+
+		List<AvailableSlots> trainerSlotsAvailable = new ArrayList<>();
+
+		for (AvailableSlots a : trainerSlots) {
+			System.out.println("*****SLOT ID****** " + a.getSlotId());
+			if (bookedSlots.contains(a.getSlotId())) {
+				System.out.println("*****SLOT ID Skipped *** " + a.getSlotId());
+				continue;
 			}
-		
+			trainerSlotsAvailable.add(a);
+		}
+
 		return new ResponseEntity<List<AvailableSlots>>(trainerSlotsAvailable, HttpStatus.OK);
 	}
 
