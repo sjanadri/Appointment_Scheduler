@@ -57,7 +57,7 @@ public class AppointmentController {
 
 	// add schedule appointment
 	@PostMapping(path = "/{myName}/add")
-	public ResponseEntity<Appointment> addAppointment(@RequestBody AvailableSlots bookSlot,
+	public ResponseEntity<?> addAppointment(@RequestBody AvailableSlots bookSlot,
 			@PathVariable("myName") String myName) {
 
 		Appointment bookAppointment = new Appointment();
@@ -67,6 +67,11 @@ public class AppointmentController {
 		bookAppointment.setAppointmentStartTime(bookSlot.getSlotBegin());
 		bookAppointment.setAppointmentEndTime(bookSlot.getSlotEnd());
 		bookAppointment.setStatus(SlotStatus.Booked.toString());
+
+		Set<Integer> bookedSlots = repo.findSlotIDbyTrainer(bookAppointment.getNameOfTrainer());
+		if (bookedSlots.contains(bookAppointment.getSlotId())) {
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Slot already Booked");
+		}
 
 		Appointment appointment = repo.save(bookAppointment);
 		return new ResponseEntity<>(appointment, HttpStatus.OK);
