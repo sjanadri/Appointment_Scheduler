@@ -17,7 +17,7 @@ public class GenerateSlots {
 		// String availableFrom1="9:30 AM";
 		// String availableTo1="5:30 PM";
 		System.out.println("*********** Inside Method*******");
-		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.ENGLISH);
+		SimpleDateFormat sdf = new SimpleDateFormat("hh:mma", Locale.ENGLISH);
 
 		Calendar calStart = Calendar.getInstance();
 		calStart.setTime(sdf.parse(fromTime));

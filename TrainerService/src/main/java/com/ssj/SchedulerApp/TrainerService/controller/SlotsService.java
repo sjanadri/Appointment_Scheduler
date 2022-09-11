@@ -20,6 +20,11 @@ public class SlotsService {
 	 public void save(MultipartFile file) {
 		    try {
 		      List<Trainer> trainers = CSVUtil.csvToTrainers(file.getInputStream());
+		      System.out.println("im here with ready trainer Slots");
+		      
+		      //if trainer already present add only Slots
+		      
+		      
 		      repo.saveAll(trainers);
 		    } catch (IOException e) {
 		      throw new RuntimeException("fail to store csv data: " + e.getMessage());

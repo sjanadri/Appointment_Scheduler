@@ -38,6 +38,8 @@ public class CSVUtil {
 
 			Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
+			
+			
 			for (CSVRecord csvRecord : csvRecords) {
 				Trainer trainerRecord = new Trainer(csvRecord.get("Name"), csvRecord.get("Day of Week"),
 						csvRecord.get("Available at"), csvRecord.get("Available until"));
