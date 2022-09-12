@@ -27,7 +27,7 @@ public class Trainer {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int id;
 
-	@Column(unique = true)
+	//@Column(unique = true)
 	String trainerName;
 	String dayOfWeek;
 	String availableFrom;
