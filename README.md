@@ -1,57 +1,53 @@
-# Appointment_Scheduler
+API Guide
 
 
-Technologies Used :
- Java 8
- Spring Boot 
- H2 DB (to make easy for evaluation)
- Microservices Environment 
-     1. Trainer Service
-     2. Application  Service
-     3. Eureka Server
-
-Trainer Service :
-
-1. Designed Following  APIs-
-      GET http://localhost:8081/trainer/hello  - To Test Service is UP
-      GET http://localhost:8081/trainer/all  - Retrieve  all Trainer Details 
-      GET http://localhost:8081/trainer/name/{trainer Name} - Retrieve trainer Details By Name
-      GET http://localhost:8081/trainer/slots/{trainer Name} - Retrieve trainer Details By Name
-      POST http://localhost:8081/trainer/add - takes Tainer Data in JSON format and Generates  Slots for his Availability  and adds Slots into DB
-
- {
-    "trainerName": "Christ Schumm",
-    "dayOfWeek": "Monday",
-    "availableFrom": "9:00 AM",
-    "availableTo": "5.30 PM"
-
-}
-
-Trainer Service DB :
-http://localhost:8081/h2-console
-
+DB : http://localhost:8081/h2-console
 	JDBC URL : jdbc:h2:file:./data/trainerDataBase
-
-Appointment Service : 
-
-GET  http://localhost:8082/appointment/hello -To Test if Service is UP
-GET  http://localhost:8082/appointment/trainerSlots/John  - trainer availability by trainer name 
-                - Internally calls Trainer Service and feches the Trainer's Slots and Then Querying  Slots from Appointment  table Shows Only available  Slots.
-GET  http://localhost:8082/appointment/id/{appointment ID}  - View  appointment by ID
-DELETE http://localhost:8082/appointment/cancelAppointment/{appointment ID}
-POST http://localhost:8082/appointment/John/add  - Takes SLOT JSON Data and Creates Appointment.
-
-{
-            "slotId": 210,
-            "slotBegin": "06:00 AM",
-            "slotEnd": "06:30 AM",
-            "trainerName": "John",
-            "status": "Available",
-            "day": "Monday"
-
-        }
-
-Appointment Service DB :
+		
 http://localhost:8082/h2-console/
 	JDBC URL : jdbc:h2:file:./data/appointmentDataBase
+
+Eureka Server
+http://localhost:8761/ 
+
+Appointment Service 
+
+GET  http://localhost:8082/appointment/hello - Check service up 
+GET  http://localhost:8082/appointment/trainerSlots/Christy%20Schumm  - trainer availability by trainer name 
+GET  http://localhost:8082/appointment/id/8  - View  appointment by ID DELETE http://localhost:8082/appointment/cancelAppointment/5 {appointment ID}
+
+POST http://localhost:8082/appointment/{customerName}/add
+ 		example : http://localhost:8082/appointment/shravani/add {
+        "slotId": 1,
+        "slotBegin": "09:00AM",
+        "slotEnd": "09:30AM",
+        "trainerName": "Christy Schumm",
+        "status": "Available",
+        "day": "Monday"
+    }
+
+
+
+Trainer Service
+GET http://localhost:8081/trainer/hello 
+GET http://localhost:8081/trainer/all - change query to select distinct
+GET http://localhost:8081/trainer/slots/Natalia Stanton Jr.   POST :  http://localhost:8081/trainer/upload  PoST : http://localhost:8081/trainer/add  {
+    "trainerName": “Antony”,
+    "dayOfWeek": "Monday",
+    "availableFrom": "9:00AM",
+    "availableTo": "5.30PM"
+}
+
+
+Whats is DONE
+- Shows only available Slots 
+-  Try booking Booked Slot - Gives error message Slot already Booked
+-  Test case for Generate Slots 
+- -Customer name is taken via the URL only 
+
+What is NOT DONE
+** Validation for Week input is NOT DONE
+** Exception Handling NOT DONE
+** NO need to persist available from till in Trainer DB Table 
+
 
