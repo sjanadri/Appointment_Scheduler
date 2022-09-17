@@ -46,8 +46,8 @@ Whats is DONE
 - -Customer name is taken via the URL only 
 
 What is NOT DONE
-** Validation for Week input is NOT DONE
-** Exception Handling NOT DONE
-** NO need to persist available from till in Trainer DB Table 
+- Validation for Week input is NOT DONE
+- Exception Handling NOT DONE
+- NO need to persist available from till in Trainer DB Table 
 
 
